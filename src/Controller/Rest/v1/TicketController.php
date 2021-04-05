@@ -4,6 +4,7 @@ namespace App\Controller\Rest\v1;
 
 use App\Message\CreateTicketMessage;
 use App\Repository\TicketRepository;
+use App\Service\TicketSearch;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\SerializerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -83,10 +84,24 @@ class TicketController extends AbstractController
      * @SWG\Tag(name="Ticket")
      *
      * @SWG\Parameter(
-     *     name="page",
+     *     name="departureAirportId",
      *     in="query",
      *     @SWG\Schema(
      *         type="integer"
+     *     )
+     * ),
+     * @SWG\Parameter(
+     *     name="arrivalAirportId",
+     *     in="query",
+     *     @SWG\Schema(
+     *         type="integer"
+     *     )
+     * ),
+     * @SWG\Parameter(
+     *     name="departureTime",
+     *     in="query",
+     *     @SWG\Schema(
+     *         type="string", format="datetime"
      *     )
      * )
      *
@@ -96,10 +111,10 @@ class TicketController extends AbstractController
      *     @SWG\MediaType(
      *         mediaType="application/json",
      *         @SWG\Schema(
-     *            @SWG\Property(type="integer", property="current_page_number"),
-     *            @SWG\Property(type="integer", property="num_items_per_page"),
-     *            @SWG\Property(type="integer", property="total_count"),
-     *            @SWG\Property(property="items", type="array",
+     *            @SWG\Property(property="tickets", type="array",
+     *                 @SWG\Items(ref=@Model(type=\App\Entity\Ticket::class))
+     *            ),
+     *            @SWG\Property(property="oneStopTickets", type="array",
      *                 @SWG\Items(ref=@Model(type=\App\Entity\Ticket::class))
      *            )
      *        )
@@ -108,15 +123,16 @@ class TicketController extends AbstractController
      *
      * @Rest\Get("/ticket")
      */
-    public function index(Request $request, PaginatorInterface $paginator, TicketRepository $ticketRepository): Response
+    public function index(Request $request, TicketSearch $ticketSearch): Response
     {
-        $pagination = $paginator->paginate(
-            $ticketRepository->findAllQueryBuilder(),
-            $request->query->getInt('page', 1),
+        $tickets = $ticketSearch->search(
+            $request->query->get('departureAirportId'),
+            $request->query->get('arrivalAirportId'),
+            $request->query->get('departureTime'),
         );
 
         $response = new Response();
-        $response->setContent($this->serializer->serialize($pagination, 'json'));
+        $response->setContent($this->serializer->serialize($tickets, 'json'));
         $response->setStatusCode(Response::HTTP_OK);
         $response->headers->add(['Content-Type' => 'application/json']);
 

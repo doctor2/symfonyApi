@@ -2,7 +2,12 @@
 
 namespace App\Repository;
 
+use App\Entity\Airport;
 use App\Entity\Ticket;
+use App\Repository\ExpressionFactory\TicketArrivalAirportEquals;
+use App\Repository\ExpressionFactory\TicketDepartureAirportEquals;
+use App\Repository\ExpressionFactory\TicketDepartureTimeAfterDate;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,6 +28,49 @@ class TicketRepository extends ServiceEntityRepository
     public function findAllQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder('ticket');
+    }
+
+    public function findByAirportsAndDepartureTime(Airport $departureAirport, Airport $arrivalAirport, DateTimeInterface $departureTime): array
+    {
+        return $this->createQueryBuilder('ticket')
+            ->andWhere(TicketDepartureAirportEquals::create('ticket',$departureAirport))
+            ->andWhere(TicketArrivalAirportEquals::create('ticket',$arrivalAirport))
+            ->andWhere(TicketDepartureTimeAfterDate::create('ticket', $departureTime))
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findByDepartureAirportAndDepartureTime(Airport $departureAirport, DateTimeInterface $departureTime, array $ticketIds): array
+    {
+        $queryBuilder = $this->createQueryBuilder('ticket');
+        $queryBuilder
+            ->where(TicketDepartureAirportEquals::create('ticket',$departureAirport))
+            ->andWhere(TicketDepartureTimeAfterDate::create('ticket', $departureTime));
+
+        if ($ticketIds) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->notIn('ticket.id', $ticketIds)
+            );
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function findByArrivalAirportAndDepartureTime(Airport $arrivalAirport, DateTimeInterface $departureTime, array $ticketIds): array
+    {
+        $queryBuilder = $this->createQueryBuilder('ticket');
+        $queryBuilder
+            ->where(TicketArrivalAirportEquals::create('ticket',$arrivalAirport))
+            ->andWhere(TicketDepartureTimeAfterDate::create('ticket', $departureTime));
+
+        if ($ticketIds) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->notIn('ticket.id', $ticketIds)
+            );
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
     public function save(Ticket $ticket): void
