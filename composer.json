@@ -13,6 +13,7 @@
         "doctrine/orm": "^2.8",
         "friendsofsymfony/rest-bundle": "^3.0",
         "jms/serializer-bundle": "^3.9",
+        "knplabs/knp-paginator-bundle": "^5.4",
         "nelmio/api-doc-bundle": "^4.2",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.2.*",
