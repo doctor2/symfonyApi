@@ -6,9 +6,9 @@ use App\Entity\Airport;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 
-class LoadAirport extends AbstractFixture
+class LoadAirportDomodedovo extends AbstractFixture
 {
-    public const REFERENCE_NAME = 'airport';
+    public const REFERENCE_NAME = 'airport-domodedovo';
 
     /**
      * {@inheritDoc}
@@ -21,7 +21,7 @@ class LoadAirport extends AbstractFixture
     public function create(string $referenceName, ObjectManager $manager): Airport
     {
         $airport = new Airport();
-        $airport->setName('Vnukovo');
+        $airport->setName('Домодедово');
         $airport->setTimezone('Europe/Moscow');
 
         $manager->persist($airport);

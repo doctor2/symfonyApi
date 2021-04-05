@@ -2,20 +2,19 @@
 
 namespace Tests\Acceptance\Controller\Rest\v1;
 
-use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\Acceptance\Controller\Rest\ApiTestCase;
-use Tests\DataFixtures\ORM\LoadAirport;
+use Tests\DataFixtures\ORM\LoadAirportVnukovo;
 
 class AirportControllerTest extends ApiTestCase
 {
     public function testGetAirports(): void
     {
-        $this->referenceRepository = $this->loadFixtures([
-            LoadAirport::class,
+        $referenceRepository = $this->loadFixtures([
+            LoadAirportVnukovo::class,
         ])->getReferenceRepository();
 
-        $this->airport = $this->referenceRepository->getReference(LoadAirport::REFERENCE_NAME);
+        $referenceRepository->getReference(LoadAirportVnukovo::REFERENCE_NAME);
 
         $this->client->request('GET', '/api/v1/airport');
 
