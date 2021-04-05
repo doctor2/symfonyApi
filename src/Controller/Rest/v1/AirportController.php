@@ -51,6 +51,18 @@ class AirportController extends AbstractFOSRestController
      *         description="Return when success",
      *         @Model(type=\App\Entity\Airport::class),
      *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid request data",
+     *         @SWG\MediaType(
+     *             mediaType="application/json",
+     *             @SWG\Schema(
+     *                @SWG\Property(type="integer", property="code"),
+     *                @SWG\Property(type="string", property="message"),
+     *                @SWG\Property(type="array", property="errors", @SWG\Items(type="string")),
+     *             )
+     *        )
+     *    )
      * )
      *
      * @Rest\Post("/airport")
