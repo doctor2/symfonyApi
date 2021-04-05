@@ -34,3 +34,8 @@ services:
         class: App\Doctrine\Constraint\EntityExists\EntityExistsValidator
         arguments: ['@doctrine.orm.entity_manager']
         tags: ['validator.constraint_validator']
+
+    Tests\DataFixtures\ORM\:
+        resource: '../tests/DataFixtures/ORM'
+        tags: ['doctrine.fixture.orm']
+        autowire: true

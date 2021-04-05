@@ -5,6 +5,7 @@ namespace App\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\Exception\ValidationFailedException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -25,19 +26,22 @@ final class ApiExceptionSubscriber implements EventSubscriberInterface
     {
         $exception = $event->getThrowable();
 
-        if (!$exception instanceof ValidationFailedException) {
+        if (!$exception instanceof HttpExceptionInterface && !$exception instanceof ValidationFailedException) {
             return;
         }
 
         $responseData = [
             'code' => $exception->getCode(),
             'message' => $exception->getMessage(),
-            'errors' => $this->normalizeErrors($exception->getViolations()),
         ];
+
+        if ($exception instanceof ValidationFailedException) {
+            $responseData['errors'] = $this->normalizeErrors($exception->getViolations());
+        }
 
         $event->allowCustomResponseCode();
 
-        $event->setResponse(new JsonResponse($responseData));
+        $event->setResponse(new JsonResponse($responseData, 400));
     }
 
     /**
