@@ -18,7 +18,7 @@ class Ticket
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Airport::class, inversedBy="departureTickets")
+     * @ORM\ManyToOne(targetEntity=Airport::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $departureAirport;

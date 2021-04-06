@@ -79,10 +79,9 @@ class AirportControllerTest extends ApiTestCase
 
     private function assertAirport(array $airport): void
     {
-        $this->assertCount(4, $airport);
+        $this->assertCount(3, $airport);
         $this->assertArrayHasKey('id', $airport);
         $this->assertArrayHasKey('name', $airport);
         $this->assertArrayHasKey('timezone', $airport);
-        $this->assertArrayHasKey('departure_tickets', $airport);
     }
 }

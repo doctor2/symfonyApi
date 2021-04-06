@@ -4,15 +4,20 @@ namespace App\Entity;
 
 use App\Repository\AirportRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=AirportRepository::class)
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 class Airport
 {
     /**
+     * @Serializer\Type("integer")
+     * @Serializer\Expose
+     *
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -20,23 +25,23 @@ class Airport
     private $id;
 
     /**
+     * @Serializer\Type("string")
+     * @Serializer\Expose
+     *
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Serializer\Type("string")
+     * @Serializer\Expose
+     *
      * @ORM\Column(type="string", length=100)
      */
     private $timezone;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="departureAirport")
-     */
-    private $departureTickets;
-
     public function __construct()
     {
-        $this->departureTickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,36 +69,6 @@ class Airport
     public function setTimezone(string $timezone): self
     {
         $this->timezone = $timezone;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Ticket[]
-     */
-    public function getDepartureTickets(): Collection
-    {
-        return $this->departureTickets;
-    }
-
-    public function addDepartureTicket(Ticket $ticket): self
-    {
-        if (!$this->departureTickets->contains($ticket)) {
-            $this->departureTickets[] = $ticket;
-            $ticket->setDepartureAirport($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDepartureTicket(Ticket $ticket): self
-    {
-        if ($this->departureTickets->removeElement($ticket)) {
-            // set the owning side to null (unless already changed)
-            if ($ticket->getDepartureAirport() === $this) {
-                $ticket->setDepartureAirport(null);
-            }
-        }
 
         return $this;
     }
