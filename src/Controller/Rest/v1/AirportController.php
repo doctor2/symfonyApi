@@ -61,7 +61,7 @@ class AirportController extends AbstractFOSRestController
      *                @SWG\Property(type="integer", property="code"),
      *                @SWG\Property(type="string", property="message"),
      *                @SWG\Property(type="array", property="errors", @SWG\Items(type="string")),
-     *             )
+     *            )
      *        )
      *    )
      * )
@@ -101,13 +101,13 @@ class AirportController extends AbstractFOSRestController
      *     @SWG\MediaType(
      *         mediaType="application/json",
      *         @SWG\Schema(
-     *            @SWG\Property(type="integer", property="current_page_number"),
-     *            @SWG\Property(type="integer", property="num_items_per_page"),
-     *            @SWG\Property(type="integer", property="total_count"),
-     *            @SWG\Property(property="items", type="array",
-     *                 @SWG\Items(ref=@Model(type=\App\Entity\Airport::class))
-     *            )
-     *        )
+     *             @SWG\Property(type="integer", property="current_page_number"),
+     *             @SWG\Property(type="integer", property="num_items_per_page"),
+     *             @SWG\Property(type="integer", property="total_count"),
+     *             @SWG\Property(property="items", type="array",
+     *                  @SWG\Items(ref=@Model(type=\App\Entity\Airport::class))
+     *             )
+     *         )
      *     )
      * )
      *

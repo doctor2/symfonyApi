@@ -3,11 +3,9 @@
 namespace App\Controller\Rest\v1;
 
 use App\Message\CreateTicketMessage;
-use App\Repository\TicketRepository;
 use App\Service\TicketSearch;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\SerializerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use OpenApi\Annotations as SWG;
@@ -57,7 +55,7 @@ class TicketController extends AbstractController
      *                @SWG\Property(type="integer", property="code"),
      *                @SWG\Property(type="string", property="message"),
      *                @SWG\Property(type="array", property="errors", @SWG\Items(type="string")),
-     *             )
+     *            )
      *        )
      *    )
      * )
@@ -111,13 +109,13 @@ class TicketController extends AbstractController
      *     @SWG\MediaType(
      *         mediaType="application/json",
      *         @SWG\Schema(
-     *            @SWG\Property(property="tickets", type="array",
-     *                 @SWG\Items(ref=@Model(type=\App\Entity\Ticket::class))
-     *            ),
-     *            @SWG\Property(property="oneStopTickets", type="array",
-     *                 @SWG\Items(ref=@Model(type=\App\Entity\Ticket::class))
-     *            )
-     *        )
+     *             @SWG\Property(property="tickets", type="array",
+     *                  @SWG\Items(ref=@Model(type=\App\Entity\Ticket::class))
+     *             ),
+     *             @SWG\Property(property="oneStopTickets", type="array",
+     *                  @SWG\Items(ref=@Model(type=\App\Entity\Ticket::class))
+     *             )
+     *         )
      *     )
      * )
      *
