@@ -3,6 +3,7 @@
 namespace App\Controller\Rest\v1;
 
 use App\Message\CreateAirportMessage;
+use App\Normalizer\PaginationNormalizer;
 use App\Repository\AirportRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -112,18 +113,19 @@ class AirportController extends AbstractFOSRestController
      *
      * @Rest\Get("/airport")
      */
-    public function index(Request $request, PaginatorInterface $paginator, AirportRepository $airportRepository): Response
-    {
+    public function index(
+        Request $request,
+        PaginatorInterface $paginator,
+        AirportRepository $airportRepository,
+        PaginationNormalizer $paginationNormalizer
+    ): Response {
         $pagination = $paginator->paginate(
             $airportRepository->findAllQueryBuilder(),
             $request->query->getInt('page', 1),
         );
 
-        $response = new Response();
-        $response->setContent($this->serializer->serialize($pagination, 'json'));
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->add(['Content-Type' => 'application/json']);
-
-        return $response;
+        return $this->json(
+            $paginationNormalizer->normalize($pagination)
+        );
     }
 }

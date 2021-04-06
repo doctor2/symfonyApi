@@ -23,6 +23,7 @@ class AirportControllerTest extends ApiTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
+        $this->assertCount(4, $content);
         $this->assertEquals(1, $content['current_page_number']);
         $this->assertEquals(10, $content['num_items_per_page']);
         $this->assertEquals(1, $content['total_count']);
