@@ -1,14 +1,13 @@
-#!/bin/sh
-GREEN='\033[0;32m'
+SHELL := /bin/bash
 
-echo "\n${GREEN}Prepare settings...${NC}"
+init:
+	echo "Prepare settings..."
+	symfony composer install
+	echo "DONE"
 
-composer install
+	echo "docker up"
+	docker-compose up -d
+	echo "DONE"
 
-echo "\n${GREEN}DONE"
-
-echo "Now run"
-docker-compose run  -d
-echo "${NC}"
-
-php bin/console doctrine:migrations:migrate
+	symfony console doctrine:migrations:migrate
+	symfony serve -d

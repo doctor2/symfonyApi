@@ -1,6 +1,6 @@
 ## Installation
 
-sh Makefile
+make init
 
 ## Application Overview
 
