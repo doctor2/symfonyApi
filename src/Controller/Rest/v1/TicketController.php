@@ -101,7 +101,7 @@ class TicketController extends AbstractController
      *     name="departureTime",
      *     in="query",
      *     @SWG\Schema(
-     *         type="string", format="datetime"
+     *         type="string", format="date"
      *     )
      * )
      *

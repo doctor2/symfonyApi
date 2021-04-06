@@ -7,6 +7,7 @@ use App\Entity\Ticket;
 use App\Repository\ExpressionFactory\TicketArrivalAirportEquals;
 use App\Repository\ExpressionFactory\TicketDepartureAirportEquals;
 use App\Repository\ExpressionFactory\TicketDepartureTimeAfterDate;
+use App\Repository\ExpressionFactory\TicketDepartureTimeBeforeDatePlusThree;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -36,6 +37,7 @@ class TicketRepository extends ServiceEntityRepository
             ->andWhere(TicketDepartureAirportEquals::create('ticket',$departureAirport))
             ->andWhere(TicketArrivalAirportEquals::create('ticket',$arrivalAirport))
             ->andWhere(TicketDepartureTimeAfterDate::create('ticket', $departureTime))
+            ->andWhere(TicketDepartureTimeBeforeDatePlusThree::create('ticket', $departureTime))
             ->getQuery()
             ->getResult()
             ;
@@ -46,7 +48,9 @@ class TicketRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('ticket');
         $queryBuilder
             ->where(TicketDepartureAirportEquals::create('ticket',$departureAirport))
-            ->andWhere(TicketDepartureTimeAfterDate::create('ticket', $departureTime));
+            ->andWhere(TicketDepartureTimeAfterDate::create('ticket', $departureTime))
+            ->andWhere(TicketDepartureTimeBeforeDatePlusThree::create('ticket', $departureTime))
+            ;
 
         if ($ticketIds) {
             $queryBuilder->andWhere(
@@ -62,7 +66,8 @@ class TicketRepository extends ServiceEntityRepository
         $queryBuilder = $this->createQueryBuilder('ticket');
         $queryBuilder
             ->where(TicketArrivalAirportEquals::create('ticket',$arrivalAirport))
-            ->andWhere(TicketDepartureTimeAfterDate::create('ticket', $departureTime));
+            ->andWhere(TicketDepartureTimeAfterDate::create('ticket', $departureTime))
+            ->andWhere(TicketDepartureTimeBeforeDatePlusThree::create('ticket', $departureTime));
 
         if ($ticketIds) {
             $queryBuilder->andWhere(

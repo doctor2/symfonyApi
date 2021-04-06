@@ -5,7 +5,8 @@ namespace App\Service;
 use App\Entity\Airport;
 use App\Repository\AirportRepository;
 use App\Repository\TicketRepository;
-use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 
 class TicketSearch
 {
@@ -25,7 +26,7 @@ class TicketSearch
     {
         $departureAirport = $this->airportRepository->find($departureAirportId);
         $arrivalAirport = $this->airportRepository->find($arrivalAirportId);
-        $departureDate = new DateTime($departureTime);
+        $departureDate = new DateTimeImmutable($departureTime);
 
         if (empty($departureAirport) || empty($arrivalAirport)) {
             return [];
@@ -44,7 +45,7 @@ class TicketSearch
      *
      * @return mixed[]
      */
-    private function searchOneStopTickets(Airport $departureAirport, Airport $arrivalAirport, DateTime $departureDate, array $ticketIds): array
+    private function searchOneStopTickets(Airport $departureAirport, Airport $arrivalAirport, DateTimeInterface $departureDate, array $ticketIds): array
     {
         $ticketsFirst = $this->ticketRepository->findByDepartureAirportAndDepartureTime(
             $departureAirport,
