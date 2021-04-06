@@ -32,11 +32,11 @@ class Airport
     /**
      * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="departureAirport")
      */
-    private $tickets;
+    private $departureTickets;
 
     public function __construct()
     {
-        $this->tickets = new ArrayCollection();
+        $this->departureTickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -71,24 +71,24 @@ class Airport
     /**
      * @return Collection|Ticket[]
      */
-    public function getTickets(): Collection
+    public function getDepartureTickets(): Collection
     {
-        return $this->tickets;
+        return $this->departureTickets;
     }
 
-    public function addTicket(Ticket $ticket): self
+    public function addDepartureTicket(Ticket $ticket): self
     {
-        if (!$this->tickets->contains($ticket)) {
-            $this->tickets[] = $ticket;
+        if (!$this->departureTickets->contains($ticket)) {
+            $this->departureTickets[] = $ticket;
             $ticket->setDepartureAirport($this);
         }
 
         return $this;
     }
 
-    public function removeTicket(Ticket $ticket): self
+    public function removeDepartureTicket(Ticket $ticket): self
     {
-        if ($this->tickets->removeElement($ticket)) {
+        if ($this->departureTickets->removeElement($ticket)) {
             // set the owning side to null (unless already changed)
             if ($ticket->getDepartureAirport() === $this) {
                 $ticket->setDepartureAirport(null);

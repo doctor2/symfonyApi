@@ -82,6 +82,6 @@ class AirportControllerTest extends ApiTestCase
         $this->assertArrayHasKey('id', $airport);
         $this->assertArrayHasKey('name', $airport);
         $this->assertArrayHasKey('timezone', $airport);
-        $this->assertArrayHasKey('tickets', $airport);
+        $this->assertArrayHasKey('departure_tickets', $airport);
     }
 }
