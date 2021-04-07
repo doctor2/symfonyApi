@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TicketRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,6 +40,18 @@ class Ticket
      */
     private $arrivalTime;
 
+    public function __construct(
+        Airport $departureAirport,
+        DateTimeInterface $departureTime,
+        Airport $arrivalAirport,
+        DateTimeInterface $arrivalTime
+    ) {
+        $this->departureAirport = $departureAirport;
+        $this->departureTime = $departureTime;
+        $this->arrivalAirport = $arrivalAirport;
+        $this->arrivalTime = $arrivalTime;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -49,19 +62,19 @@ class Ticket
         return $this->departureAirport;
     }
 
-    public function setDepartureAirport(?Airport $departureAirport): self
+    public function setDepartureAirport(Airport $departureAirport): self
     {
         $this->departureAirport = $departureAirport;
 
         return $this;
     }
 
-    public function getDepartureTime(): ?\DateTimeInterface
+    public function getDepartureTime(): ?DateTimeInterface
     {
         return $this->departureTime;
     }
 
-    public function setDepartureTime(\DateTimeInterface $departureTime): self
+    public function setDepartureTime(DateTimeInterface $departureTime): self
     {
         $this->departureTime = $departureTime;
 
@@ -73,19 +86,19 @@ class Ticket
         return $this->arrivalAirport;
     }
 
-    public function setArrivalAirport(?Airport $arrivalAirport): self
+    public function setArrivalAirport(Airport $arrivalAirport): self
     {
         $this->arrivalAirport = $arrivalAirport;
 
         return $this;
     }
 
-    public function getArrivalTime(): ?\DateTimeInterface
+    public function getArrivalTime(): ?DateTimeInterface
     {
         return $this->arrivalTime;
     }
 
-    public function setArrivalTime(\DateTimeInterface $arrivalTime): self
+    public function setArrivalTime(DateTimeInterface $arrivalTime): self
     {
         $this->arrivalTime = $arrivalTime;
 

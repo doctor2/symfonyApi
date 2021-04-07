@@ -18,9 +18,7 @@ final class CreateAirportMessageHandler implements MessageHandlerInterface
 
     public function __invoke(CreateAirportMessage $message): Airport
     {
-        $airport = new Airport();
-        $airport->setName($message->getName());
-        $airport->setTimezone($message->getTimezone());
+        $airport = new Airport($message->getName(), $message->getTimezone());
 
         $this->airportRepository->save($airport);
 

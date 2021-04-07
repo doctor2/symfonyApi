@@ -40,8 +40,10 @@ class Airport
      */
     private $timezone;
 
-    public function __construct()
+    public function __construct(string $name, string $timezone)
     {
+        $this->name = $name;
+        $this->timezone = $timezone;
     }
 
     public function getId(): ?int

@@ -22,11 +22,12 @@ final class CreateTicketMessageHandler implements MessageHandlerInterface
 
     public function __invoke(CreateTicketMessage $message): Ticket
     {
-        $ticket = new Ticket();
-        $ticket->setDepartureAirport($this->airportRepository->find($message->getDepartureAirportId()));
-        $ticket->setDepartureTime(new DateTime($message->getDepartureTime()));
-        $ticket->setArrivalAirport($this->airportRepository->find($message->getArrivalAirportId()));
-        $ticket->setArrivalTime(new DateTime($message->getArrivalTime()));
+        $ticket = new Ticket(
+            $this->airportRepository->find($message->getDepartureAirportId()),
+            new DateTime($message->getDepartureTime()),
+            $this->airportRepository->find($message->getArrivalAirportId()),
+            new DateTime($message->getArrivalTime())
+        );
 
         $this->ticketRepository->save($ticket);
 
