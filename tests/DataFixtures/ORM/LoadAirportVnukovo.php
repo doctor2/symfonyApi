@@ -20,9 +20,7 @@ class LoadAirportVnukovo extends AbstractFixture
 
     public function create(string $referenceName, ObjectManager $manager): Airport
     {
-        $airport = new Airport();
-        $airport->setName('Vnukovo');
-        $airport->setTimezone('Europe/Moscow');
+        $airport = new Airport('Vnukovo', 'Europe/Moscow');
 
         $manager->persist($airport);
         $this->addReference($referenceName, $airport);
