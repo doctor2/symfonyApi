@@ -11,3 +11,8 @@ init:
 
 	symfony console doctrine:migrations:migrate
 	symfony serve -d
+
+stop:
+	docker-compose down
+
+	symfony server:stop
