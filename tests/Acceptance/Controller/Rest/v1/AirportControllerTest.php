@@ -14,7 +14,7 @@ class AirportControllerTest extends ApiTestCase
             LoadAirportVnukovo::class,
         ])->getReferenceRepository();
 
-        $referenceRepository->getReference(LoadAirportVnukovo::REFERENCE_NAME);
+        $airportVnukovo = $referenceRepository->getReference(LoadAirportVnukovo::REFERENCE_NAME);
 
         $this->client->request('GET', '/api/v1/airport');
 
@@ -29,7 +29,12 @@ class AirportControllerTest extends ApiTestCase
         $this->assertEquals(1, $content['total_count']);
         $this->assertCount(1, $content['items']);
 
-        $this->assertAirport($content['items'][0]);
+        $airport = $content['items'][0];
+
+        $this->assertAirport($airport);
+        $this->assertEquals($airportVnukovo->getId(), $airport['id']);
+        $this->assertEquals($airportVnukovo->getName(), $airport['name']);
+        $this->assertEquals($airportVnukovo->getTimezone(), $airport['timezone']);
     }
 
     public function testErrorWhileCreatingAirport(): void
@@ -53,20 +58,27 @@ class AirportControllerTest extends ApiTestCase
         $this->assertArrayHasKey('code', $content);
         $this->assertArrayHasKey('message', $content);
         $this->assertArrayHasKey('errors', $content);
+
+        $this->assertCount(2, $content['errors']);
+
+        $this->assertArrayHasKey('name', $content['errors']);
+        $this->assertArrayHasKey('timezone', $content['errors']);
     }
 
     public function testCreateAirport(): void
     {
+        $expectedData = [
+            'name' => 'new Airport',
+            'timezone' => 'Europe/Skopje',
+        ];
+
         $this->client->request(
             'POST',
             '/api/v1/airport',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
-            json_encode([
-                'name' => 'new Airport',
-                'timezone' => 'Europe/Skopje',
-            ])
+            json_encode($expectedData)
         );
 
         $response = $this->client->getResponse();
@@ -75,6 +87,9 @@ class AirportControllerTest extends ApiTestCase
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
 
         $this->assertAirport($content);
+
+        $this->assertEquals($expectedData['name'], $content['name']);
+        $this->assertEquals($expectedData['timezone'], $content['timezone']);
     }
 
     private function assertAirport(array $airport): void
