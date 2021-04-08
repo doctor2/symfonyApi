@@ -9,6 +9,10 @@ init:
 	docker-compose up -d
 	echo "DONE"
 
+	echo "Wait mysql-server loading..."
+	sleep 15s
+	echo "DONE"
+
 	symfony console doctrine:migrations:migrate
 	symfony serve -d
 
