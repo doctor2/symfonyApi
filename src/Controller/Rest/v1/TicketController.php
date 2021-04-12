@@ -10,6 +10,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use OpenApi\Annotations as SWG;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -62,7 +63,7 @@ class TicketController extends AbstractController
      *
      * @Rest\Post("/ticket")
      */
-    public function create(Request $request, MessageBusInterface $bus): Response
+    public function create(Request $request, MessageBusInterface $bus): JsonResponse
     {
         $requestData = $request->toArray();
 
@@ -70,12 +71,11 @@ class TicketController extends AbstractController
         $handledStamp = $envelope->last(HandledStamp::class);
         $ticket = $handledStamp->getResult();
 
-        $response = new Response();
-        $response->setContent($this->serializer->serialize($ticket, 'json'));
-        $response->setStatusCode(Response::HTTP_CREATED);
-        $response->headers->add(['Content-Type' => 'application/json']);
+        $response = new JsonResponse();
 
-        return $response;
+        return $response
+            ->setContent($this->serializer->serialize($ticket, 'json'))
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -121,7 +121,7 @@ class TicketController extends AbstractController
      *
      * @Rest\Get("/ticket")
      */
-    public function index(Request $request, TicketSearch $ticketSearch): Response
+    public function index(Request $request, TicketSearch $ticketSearch): JsonResponse
     {
         $tickets = $ticketSearch->search(
             $request->query->get('departureAirportId'),
@@ -129,11 +129,9 @@ class TicketController extends AbstractController
             $request->query->get('departureTime'),
         );
 
-        $response = new Response();
-        $response->setContent($this->serializer->serialize($tickets, 'json'));
-        $response->setStatusCode(Response::HTTP_OK);
-        $response->headers->add(['Content-Type' => 'application/json']);
+        $response = new JsonResponse();
 
-        return $response;
+        return $response
+            ->setContent($this->serializer->serialize($tickets, 'json'));
     }
 }

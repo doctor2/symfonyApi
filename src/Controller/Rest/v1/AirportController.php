@@ -12,6 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use OpenApi\Annotations as SWG;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -68,7 +69,7 @@ class AirportController extends AbstractFOSRestController
      *
      * @Rest\Post("/airport")
      */
-    public function create(Request $request, MessageBusInterface $bus): Response
+    public function create(Request $request, MessageBusInterface $bus): JsonResponse
     {
         $requestData = $request->toArray();
 
@@ -76,12 +77,11 @@ class AirportController extends AbstractFOSRestController
         $handledStamp = $envelope->last(HandledStamp::class);
         $airport = $handledStamp->getResult();
 
-        $response = new Response();
-        $response->setContent($this->serializer->serialize($airport, 'json'));
-        $response->setStatusCode(Response::HTTP_CREATED);
-        $response->headers->add(['Content-Type' => 'application/json']);
+        $response = new JsonResponse();
 
-        return $response;
+        return $response
+            ->setContent($this->serializer->serialize($airport, 'json'))
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -118,7 +118,7 @@ class AirportController extends AbstractFOSRestController
         PaginatorInterface $paginator,
         AirportRepository $airportRepository,
         PaginationNormalizer $paginationNormalizer
-    ): Response {
+    ): JsonResponse {
         $pagination = $paginator->paginate(
             $airportRepository->findAllQueryBuilder(),
             $request->query->getInt('page', 1),
