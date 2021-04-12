@@ -3,7 +3,7 @@
 namespace App\Controller\Rest\v1;
 
 use App\Message\CreateTicketMessage;
-use App\Service\TicketSearch;
+use App\Message\TicketSearchMessage;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\SerializerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -19,10 +19,12 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 class TicketController extends AbstractController
 {
     private $serializer;
+    private $bus;
 
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(SerializerInterface $serializer, MessageBusInterface $bus)
     {
         $this->serializer = $serializer;
+        $this->bus = $bus;
     }
 
     /**
@@ -63,11 +65,11 @@ class TicketController extends AbstractController
      *
      * @Rest\Post("/ticket")
      */
-    public function create(Request $request, MessageBusInterface $bus): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         $requestData = $request->toArray();
 
-        $envelope = $bus->dispatch(new CreateTicketMessage($requestData));
+        $envelope = $this->bus->dispatch(new CreateTicketMessage($requestData));
         $handledStamp = $envelope->last(HandledStamp::class);
         $ticket = $handledStamp->getResult();
 
@@ -121,13 +123,11 @@ class TicketController extends AbstractController
      *
      * @Rest\Get("/ticket")
      */
-    public function index(Request $request, TicketSearch $ticketSearch): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $tickets = $ticketSearch->search(
-            $request->query->get('departureAirportId'),
-            $request->query->get('arrivalAirportId'),
-            $request->query->get('departureTime'),
-        );
+        $envelope = $this->bus->dispatch(new TicketSearchMessage($request->query->all()));
+        $handledStamp = $envelope->last(HandledStamp::class);
+        $tickets = $handledStamp->getResult();
 
         $response = new JsonResponse();
 

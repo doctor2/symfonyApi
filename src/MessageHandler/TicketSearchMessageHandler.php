@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Service;
+namespace App\MessageHandler;
 
 use App\Entity\Airport;
+use App\Entity\Ticket;
+use App\Message\TicketSearchMessage;
 use App\Repository\AirportRepository;
 use App\Repository\TicketRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class TicketSearch
+final class TicketSearchMessageHandler implements MessageHandlerInterface
 {
     private $ticketRepository;
     private $airportRepository;
@@ -22,11 +25,11 @@ class TicketSearch
     /**
      * @return mixed[]
      */
-    public function search(int $departureAirportId, int $arrivalAirportId, string $departureTime): array
+    public function __invoke(TicketSearchMessage $message): array
     {
-        $departureAirport = $this->airportRepository->find($departureAirportId);
-        $arrivalAirport = $this->airportRepository->find($arrivalAirportId);
-        $departureDate = new DateTimeImmutable($departureTime);
+        $departureAirport = $this->airportRepository->find($message->getDepartureAirportId());
+        $arrivalAirport = $this->airportRepository->find($message->getArrivalAirportId());
+        $departureDate = new DateTimeImmutable($message->getDepartureTime());
 
         if (empty($departureAirport) || empty($arrivalAirport)) {
             return [];
