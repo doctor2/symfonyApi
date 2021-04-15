@@ -2,8 +2,8 @@
 
 namespace App\Controller\Rest\v1;
 
-use App\Message\CreateTicketMessage;
-use App\Message\TicketSearchMessage;
+use App\Message\Command\CreateTicketMessage;
+use App\Message\Query\TicketSearchMessage;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\SerializerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -19,12 +19,10 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 class TicketController extends AbstractController
 {
     private $serializer;
-    private $bus;
 
-    public function __construct(SerializerInterface $serializer, MessageBusInterface $bus)
+    public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
-        $this->bus = $bus;
     }
 
     /**
@@ -65,11 +63,11 @@ class TicketController extends AbstractController
      *
      * @Rest\Post("/ticket")
      */
-    public function create(Request $request): JsonResponse
+    public function create(Request $request, MessageBusInterface $messageBus): JsonResponse
     {
         $requestData = $request->toArray();
 
-        $envelope = $this->bus->dispatch(new CreateTicketMessage($requestData));
+        $envelope = $messageBus->dispatch(new CreateTicketMessage($requestData));
         $handledStamp = $envelope->last(HandledStamp::class);
         $ticket = $handledStamp->getResult();
 
@@ -123,9 +121,9 @@ class TicketController extends AbstractController
      *
      * @Rest\Get("/ticket")
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request, MessageBusInterface $queryBus): JsonResponse
     {
-        $envelope = $this->bus->dispatch(new TicketSearchMessage($request->query->all()));
+        $envelope = $queryBus->dispatch(new TicketSearchMessage($request->query->all()));
         $handledStamp = $envelope->last(HandledStamp::class);
         $tickets = $handledStamp->getResult();
 

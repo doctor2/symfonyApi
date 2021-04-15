@@ -1,9 +1,9 @@
 <?php
 
-namespace App\MessageHandler;
+namespace App\MessageHandler\Command;
 
 use App\Entity\Ticket;
-use App\Message\CreateTicketMessage;
+use App\Message\Command\CreateTicketMessage;
 use App\Repository\AirportRepository;
 use App\Repository\TicketRepository;
 use DateTime;

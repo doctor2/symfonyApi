@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Message;
+namespace App\Message\Command;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

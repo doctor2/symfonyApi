@@ -1,10 +1,10 @@
 <?php
 
-namespace App\MessageHandler;
+namespace App\MessageHandler\Query;
 
 use App\Entity\Airport;
 use App\Entity\Ticket;
-use App\Message\TicketSearchMessage;
+use App\Message\Query\TicketSearchMessage;
 use App\Repository\AirportRepository;
 use App\Repository\TicketRepository;
 use DateTimeImmutable;

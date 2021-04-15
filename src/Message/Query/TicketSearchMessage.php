@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Message;
+namespace App\Message\Query;
 
 use App\Doctrine\Constraint\EntityExists\EntityExists;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class CreateTicketMessage
+final class TicketSearchMessage
 {
     /**
      * @Assert\NotBlank()
@@ -17,7 +17,7 @@ final class CreateTicketMessage
 
     /**
      * @Assert\NotBlank()
-     * @Assert\DateTime()
+     * @Assert\Date()
      */
     private $departureTime;
 
@@ -29,23 +29,11 @@ final class CreateTicketMessage
      */
     private $arrivalAirportId;
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\DateTime()
-     */
-    private $arrivalTime;
-
-    public function __construct(array $requestData)
+    public function __construct(array $queryParams)
     {
-        $this->departureAirportId = $requestData['departureAirportId'] ?? null;
-        $this->departureTime = $requestData['departureTime'] ?? null;
-        $this->arrivalAirportId = $requestData['arrivalAirportId'] ?? null;
-        $this->arrivalTime = $requestData['arrivalTime'] ?? null;
-    }
-
-    public function getArrivalTime(): string
-    {
-        return $this->arrivalTime;
+        $this->departureAirportId = $queryParams['departureAirportId'] ?? null;
+        $this->departureTime = $queryParams['departureTime'] ?? null;
+        $this->arrivalAirportId = $queryParams['arrivalAirportId'] ?? null;
     }
 
     public function getArrivalAirportId(): int

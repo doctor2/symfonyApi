@@ -39,3 +39,13 @@ services:
         resource: '../tests/DataFixtures/ORM'
         tags: ['doctrine.fixture.orm']
         autowire: true
+
+    App\MessageHandler\Command\:
+        resource: '../src/MessageHandler/Command'
+        autoconfigure: false
+        tags: [{ name: messenger.message_handler, bus: command.bus }]
+
+    App\MessageHandler\Query\:
+        resource: '../src/MessageHandler/Query'
+        autoconfigure: false
+        tags: [{ name: messenger.message_handler, bus: query.bus }]
