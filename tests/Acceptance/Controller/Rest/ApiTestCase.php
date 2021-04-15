@@ -6,6 +6,9 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * @property  AbstractBrowser client
+ */
 abstract class ApiTestCase extends WebTestCase
 {
     use FixturesTrait;
