@@ -20,3 +20,9 @@ stop:
 	docker-compose down
 
 	symfony server:stop
+
+psalm-analyse:
+	php vendor/bin/psalm
+
+phan-analyse:
+	php vendor/bin/phan
