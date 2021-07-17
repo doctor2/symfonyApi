@@ -21,8 +21,8 @@ stop:
 
 	symfony server:stop
 
-psalm-analyse:
+psalm-analysis:
 	php vendor/bin/psalm
 
-phan-analyse:
+phan-analysis:
 	php vendor/bin/phan
