@@ -7,7 +7,7 @@ use App\Normalizer\PaginationNormalizer;
 use App\Repository\AirportRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\ArrayTransformerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Operation;
@@ -20,11 +20,11 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 class AirportController extends AbstractFOSRestController
 {
-    private $serializer;
+    private $arrayTransformer;
 
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(ArrayTransformerInterface $arrayTransformer)
     {
-        $this->serializer = $serializer;
+        $this->arrayTransformer = $arrayTransformer;
     }
 
     /**
@@ -77,11 +77,7 @@ class AirportController extends AbstractFOSRestController
         $handledStamp = $envelope->last(HandledStamp::class);
         $airport = $handledStamp->getResult();
 
-        $response = new JsonResponse();
-
-        return $response
-            ->setContent($this->serializer->serialize($airport, 'json'))
-            ->setStatusCode(Response::HTTP_CREATED);
+        return $this->json($this->arrayTransformer->toArray($airport), Response::HTTP_CREATED);
     }
 
     /**

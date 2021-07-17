@@ -3,7 +3,7 @@
 namespace Tests\Unit\Normalizer;
 
 use App\Normalizer\PaginationNormalizer;
-use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\ArrayTransformerInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Tests\Unit\TestCase;
 
@@ -18,7 +18,7 @@ class PaginationNormalizerTest extends TestCase
             'items' => ['test'],
         ];
 
-        $normalizer = new PaginationNormalizer($this->createSerializer());
+        $normalizer = new PaginationNormalizer($this->createArrayTransformer());
 
         $this->assertEquals($expectedData, $normalizer->normalize($this->createPagination()));
     }
@@ -38,12 +38,12 @@ class PaginationNormalizerTest extends TestCase
         return $pagination;
     }
 
-    private function createSerializer(): SerializerInterface
+    private function createArrayTransformer(): ArrayTransformerInterface
     {
-        $serializer = $this->createMock(SerializerInterface::class);
-        $serializer->method('serialize')
-            ->willReturn(json_encode(['test']));
+        $arrayTransformer = $this->createMock(ArrayTransformerInterface::class);
+        $arrayTransformer->method('toArray')
+            ->willReturn(['test']);
 
-        return $serializer;
+        return $arrayTransformer;
     }
 }

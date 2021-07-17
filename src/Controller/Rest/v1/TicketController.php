@@ -5,7 +5,7 @@ namespace App\Controller\Rest\v1;
 use App\Message\Command\CreateTicketMessage;
 use App\Message\Query\TicketSearchMessage;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\ArrayTransformerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use OpenApi\Annotations as SWG;
@@ -18,11 +18,11 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 class TicketController extends AbstractController
 {
-    private $serializer;
+    private $arrayTransformer;
 
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(ArrayTransformerInterface $arrayTransformer)
     {
-        $this->serializer = $serializer;
+        $this->arrayTransformer = $arrayTransformer;
     }
 
     /**
@@ -71,11 +71,7 @@ class TicketController extends AbstractController
         $handledStamp = $envelope->last(HandledStamp::class);
         $ticket = $handledStamp->getResult();
 
-        $response = new JsonResponse();
-
-        return $response
-            ->setContent($this->serializer->serialize($ticket, 'json'))
-            ->setStatusCode(Response::HTTP_CREATED);
+        return $this->json($this->arrayTransformer->toArray($ticket), Response::HTTP_CREATED);
     }
 
     /**
@@ -127,9 +123,6 @@ class TicketController extends AbstractController
         $handledStamp = $envelope->last(HandledStamp::class);
         $tickets = $handledStamp->getResult();
 
-        $response = new JsonResponse();
-
-        return $response
-            ->setContent($this->serializer->serialize($tickets, 'json'));
+        return $this->json($this->arrayTransformer->toArray($tickets), Response::HTTP_CREATED);
     }
 }

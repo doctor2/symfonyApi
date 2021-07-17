@@ -2,16 +2,16 @@
 
 namespace App\Normalizer;
 
-use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\ArrayTransformerInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
 class PaginationNormalizer
 {
-    private $serializer;
+    private $arrayTransformer;
 
-    public function __construct(SerializerInterface $serializer)
+    public function __construct(ArrayTransformerInterface $arrayTransformer)
     {
-        $this->serializer = $serializer;
+        $this->arrayTransformer = $arrayTransformer;
     }
 
     /**
@@ -23,7 +23,7 @@ class PaginationNormalizer
             'current_page_number' => $pagination->getCurrentPageNumber(),
             'num_items_per_page' => $pagination->getItemNumberPerPage(),
             'total_count' => $pagination->getTotalItemCount(),
-            'items' => json_decode($this->serializer->serialize($pagination->getItems(), 'json'), true),
+            'items' => $this->arrayTransformer->toArray($pagination->getItems()),
         ];
     }
 }
