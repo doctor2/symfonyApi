@@ -11,6 +11,7 @@ class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
+    /** @phan-suppress PhanMissingRequireFile */
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $container->import('../config/{packages}/*.yaml');
@@ -24,6 +25,7 @@ class Kernel extends BaseKernel
         }
     }
 
+    /** @phan-suppress PhanMissingRequireFile */
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->import('../config/{routes}/'.$this->environment.'/*.yaml');

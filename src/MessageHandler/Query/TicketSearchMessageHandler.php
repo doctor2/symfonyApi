@@ -7,8 +7,7 @@ use App\Entity\Ticket;
 use App\Message\Query\TicketSearchMessage;
 use App\Repository\AirportRepository;
 use App\Repository\TicketRepository;
-use DateTimeImmutable;
-use DateTimeInterface;
+use DateTime;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class TicketSearchMessageHandler implements MessageHandlerInterface
@@ -29,7 +28,7 @@ final class TicketSearchMessageHandler implements MessageHandlerInterface
     {
         $departureAirport = $this->airportRepository->find($message->getDepartureAirportId());
         $arrivalAirport = $this->airportRepository->find($message->getArrivalAirportId());
-        $departureDate = new DateTimeImmutable($message->getDepartureTime());
+        $departureDate = new DateTime($message->getDepartureTime());
 
         if (empty($departureAirport) || empty($arrivalAirport)) {
             return [];
@@ -44,11 +43,11 @@ final class TicketSearchMessageHandler implements MessageHandlerInterface
     }
 
     /**
-     * @param int[] $ticketIds
+     * @param list<?int> $ticketIds
      *
      * @return mixed[]
      */
-    private function searchOneStopTickets(Airport $departureAirport, Airport $arrivalAirport, DateTimeInterface $departureDate, array $ticketIds): array
+    private function searchOneStopTickets(Airport $departureAirport, Airport $arrivalAirport, DateTime $departureDate, array $ticketIds): array
     {
         $ticketsFirst = $this->ticketRepository->findByDepartureAirportAndDepartureTime(
             $departureAirport,
@@ -84,7 +83,7 @@ final class TicketSearchMessageHandler implements MessageHandlerInterface
     /**
      * @param Ticket[] $tickets
      *
-     * @return int[]
+     * @return list<?int>
      */
     private function getTicketIds(array $tickets): array
     {

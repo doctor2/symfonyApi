@@ -2,12 +2,12 @@
 
 namespace App\Repository\ExpressionFactory;
 
-use DateTimeInterface;
+use DateTime;
 use Doctrine\ORM\Query\Expr;
 
 class TicketDepartureTimeAfterDate
 {
-    public static function create(string $ticketAlias, DateTimeInterface $date): Expr\Comparison
+    public static function create(string $ticketAlias, DateTime $date): Expr\Comparison
     {
         $expressionBuilder = new Expr();
 

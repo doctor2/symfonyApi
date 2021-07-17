@@ -67,6 +67,8 @@ class AirportController extends AbstractFOSRestController
      *    )
      * )
      *
+     * @phan-suppress PhanUndeclaredMethod
+     *
      * @Rest\Post("/airport")
      */
     public function create(Request $request, MessageBusInterface $bus): JsonResponse
@@ -74,6 +76,7 @@ class AirportController extends AbstractFOSRestController
         $requestData = $request->toArray();
 
         $envelope = $bus->dispatch(new CreateAirportMessage($requestData));
+        /** @var HandledStamp $handledStamp */
         $handledStamp = $envelope->last(HandledStamp::class);
         $airport = $handledStamp->getResult();
 

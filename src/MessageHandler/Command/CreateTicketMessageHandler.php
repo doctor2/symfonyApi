@@ -2,6 +2,7 @@
 
 namespace App\MessageHandler\Command;
 
+use App\Entity\Airport;
 use App\Entity\Ticket;
 use App\Message\Command\CreateTicketMessage;
 use App\Repository\AirportRepository;
@@ -20,12 +21,18 @@ final class CreateTicketMessageHandler implements MessageHandlerInterface
         $this->airportRepository = $airportRepository;
     }
 
+    /** @phan-suppress PhanPossiblyNullTypeArgument */
     public function __invoke(CreateTicketMessage $message): Ticket
     {
+        /** @var Airport $departureAirport */
+        $departureAirport = $this->airportRepository->find($message->getDepartureAirportId());
+        /** @var Airport $arrivalAirport */
+        $arrivalAirport = $this->airportRepository->find($message->getArrivalAirportId());
+
         $ticket = new Ticket(
-            $this->airportRepository->find($message->getDepartureAirportId()),
+            $departureAirport,
             new DateTime($message->getDepartureTime()),
-            $this->airportRepository->find($message->getArrivalAirportId()),
+            $arrivalAirport,
             new DateTime($message->getArrivalTime())
         );
 

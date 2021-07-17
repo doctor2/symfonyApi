@@ -61,6 +61,8 @@ class TicketController extends AbstractController
      *    )
      * )
      *
+     * @phan-suppress PhanUndeclaredMethod
+     *
      * @Rest\Post("/ticket")
      */
     public function create(Request $request, MessageBusInterface $messageBus): JsonResponse
@@ -68,6 +70,7 @@ class TicketController extends AbstractController
         $requestData = $request->toArray();
 
         $envelope = $messageBus->dispatch(new CreateTicketMessage($requestData));
+        /** @var HandledStamp $handledStamp */
         $handledStamp = $envelope->last(HandledStamp::class);
         $ticket = $handledStamp->getResult();
 
@@ -115,11 +118,14 @@ class TicketController extends AbstractController
      *     )
      * )
      *
+     * @phan-suppress PhanUndeclaredMethod
+     *
      * @Rest\Get("/ticket")
      */
     public function index(Request $request, MessageBusInterface $queryBus): JsonResponse
     {
         $envelope = $queryBus->dispatch(new TicketSearchMessage($request->query->all()));
+        /** @var HandledStamp $handledStamp */
         $handledStamp = $envelope->last(HandledStamp::class);
         $tickets = $handledStamp->getResult();
 

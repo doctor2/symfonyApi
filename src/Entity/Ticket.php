@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TicketRepository;
-use DateTimeInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -42,9 +42,9 @@ class Ticket
 
     public function __construct(
         Airport $departureAirport,
-        DateTimeInterface $departureTime,
+        DateTime $departureTime,
         Airport $arrivalAirport,
-        DateTimeInterface $arrivalTime
+        DateTime $arrivalTime
     ) {
         $this->departureAirport = $departureAirport;
         $this->departureTime = $departureTime;
@@ -69,12 +69,12 @@ class Ticket
         return $this;
     }
 
-    public function getDepartureTime(): ?DateTimeInterface
+    public function getDepartureTime(): ?DateTime
     {
         return $this->departureTime;
     }
 
-    public function setDepartureTime(DateTimeInterface $departureTime): self
+    public function setDepartureTime(DateTime $departureTime): self
     {
         $this->departureTime = $departureTime;
 
@@ -93,12 +93,12 @@ class Ticket
         return $this;
     }
 
-    public function getArrivalTime(): ?DateTimeInterface
+    public function getArrivalTime(): ?DateTime
     {
         return $this->arrivalTime;
     }
 
-    public function setArrivalTime(DateTimeInterface $arrivalTime): self
+    public function setArrivalTime(DateTime $arrivalTime): self
     {
         $this->arrivalTime = $arrivalTime;
 

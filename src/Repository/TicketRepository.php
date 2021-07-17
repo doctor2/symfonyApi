@@ -8,7 +8,7 @@ use App\Repository\ExpressionFactory\TicketArrivalAirportEquals;
 use App\Repository\ExpressionFactory\TicketDepartureAirportEquals;
 use App\Repository\ExpressionFactory\TicketDepartureTimeAfterDate;
 use App\Repository\ExpressionFactory\TicketDepartureTimeBeforeDatePlusThree;
-use DateTimeInterface;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,8 +16,6 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Ticket|null find($id, $lockMode = null, $lockVersion = null)
  * @method Ticket|null findOneBy(array $criteria, array $orderBy = null)
- * @method Ticket[]    findAll()
- * @method Ticket[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class TicketRepository extends ServiceEntityRepository
 {
@@ -31,7 +29,7 @@ class TicketRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('ticket');
     }
 
-    public function findByAirportsAndDepartureTime(Airport $departureAirport, Airport $arrivalAirport, DateTimeInterface $departureTime): array
+    public function findByAirportsAndDepartureTime(Airport $departureAirport, Airport $arrivalAirport, DateTime $departureTime): array
     {
         return $this->createQueryBuilder('ticket')
             ->andWhere(TicketDepartureAirportEquals::create('ticket',$departureAirport))
@@ -43,7 +41,7 @@ class TicketRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findByDepartureAirportAndDepartureTime(Airport $departureAirport, DateTimeInterface $departureTime, array $ticketIds): array
+    public function findByDepartureAirportAndDepartureTime(Airport $departureAirport, DateTime $departureTime, array $ticketIds): array
     {
         $queryBuilder = $this->createQueryBuilder('ticket');
         $queryBuilder
@@ -61,7 +59,7 @@ class TicketRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function findByArrivalAirportAndDepartureTime(Airport $arrivalAirport, DateTimeInterface $departureTime, array $ticketIds): array
+    public function findByArrivalAirportAndDepartureTime(Airport $arrivalAirport, DateTime $departureTime, array $ticketIds): array
     {
         $queryBuilder = $this->createQueryBuilder('ticket');
         $queryBuilder

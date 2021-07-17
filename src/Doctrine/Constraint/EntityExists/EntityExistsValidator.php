@@ -15,7 +15,7 @@ class EntityExistsValidator extends ConstraintValidator
         $this->objectManager = $objectManager;
     }
 
-    public function validate($entityIdentifier, Constraint $constraint): void
+    public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof EntityExists) {
             throw new \InvalidArgumentException(sprintf('Constraint must be instance %s', EntityExists::class));
@@ -29,7 +29,7 @@ class EntityExistsValidator extends ConstraintValidator
         }
 
         $repository = $this->objectManager->getRepository($constraint->entityClass);
-        $entity = $entityIdentifier ? $repository->find($entityIdentifier) : null;
+        $entity = $value ? $repository->find($value) : null;
 
         if ($entity === null) {
             $this->context->addViolation($constraint->message);
