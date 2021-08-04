@@ -6,9 +6,6 @@ framework:
             command.bus:
                 middleware:
                     - messenger.middleware.validation
-            query.bus:
-                middleware:
-                    - messenger.middleware.validation
         # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
         # failure_transport: failed
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Message\Command;
+namespace App\Message\Command\Airport;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

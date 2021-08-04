@@ -2,8 +2,8 @@
 
 namespace App\Controller\Rest\v1;
 
-use App\Message\Command\CreateTicketMessage;
-use App\Message\Query\TicketSearchMessage;
+use App\Message\Command\Ticket\CreateTicketMessage;
+use App\Message\Command\Ticket\TicketSearchMessage;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\ArrayTransformerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -122,13 +122,13 @@ class TicketController extends AbstractController
      *
      * @Rest\Get("/ticket")
      */
-    public function index(Request $request, MessageBusInterface $queryBus): JsonResponse
+    public function index(Request $request, MessageBusInterface $messageBus): JsonResponse
     {
-        $envelope = $queryBus->dispatch(new TicketSearchMessage($request->query->all()));
+        $envelope = $messageBus->dispatch(new TicketSearchMessage($request->query->all()));
         /** @var HandledStamp $handledStamp */
         $handledStamp = $envelope->last(HandledStamp::class);
         $tickets = $handledStamp->getResult();
 
-        return $this->json($this->arrayTransformer->toArray($tickets), Response::HTTP_CREATED);
+        return $this->json($this->arrayTransformer->toArray($tickets));
     }
 }
