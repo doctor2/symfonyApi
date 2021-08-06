@@ -1,9 +1,9 @@
 <?php
 
-namespace App\MessageHandler\Command\Airport;
+namespace App\MessageHandler\Airport;
 
 use App\Entity\Airport;
-use App\Message\Command\Airport\CreateAirportMessage;
+use App\Message\Airport\CreateAirportMessage;
 use App\Repository\AirportRepository;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 

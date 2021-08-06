@@ -1,10 +1,10 @@
 <?php
 
-namespace App\MessageHandler\Command\Ticket;
+namespace App\MessageHandler\Ticket;
 
 use App\Entity\Airport;
 use App\Entity\Ticket;
-use App\Message\Command\Ticket\TicketSearchMessage;
+use App\Message\Ticket\TicketSearchMessage;
 use App\Repository\AirportRepository;
 use App\Repository\TicketRepository;
 use DateTime;

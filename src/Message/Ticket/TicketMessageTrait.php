@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Message\Command\Ticket;
+namespace App\Message\Ticket;
 
 use App\Doctrine\Constraint\EntityExists\EntityExists;
 use Symfony\Component\Validator\Constraints as Assert;

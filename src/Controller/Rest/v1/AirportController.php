@@ -2,7 +2,7 @@
 
 namespace App\Controller\Rest\v1;
 
-use App\Message\Command\Airport\CreateAirportMessage;
+use App\Message\Airport\CreateAirportMessage;
 use App\Normalizer\PaginationNormalizer;
 use App\Repository\AirportRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;

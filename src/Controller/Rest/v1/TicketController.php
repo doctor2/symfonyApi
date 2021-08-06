@@ -2,8 +2,8 @@
 
 namespace App\Controller\Rest\v1;
 
-use App\Message\Command\Ticket\CreateTicketMessage;
-use App\Message\Command\Ticket\TicketSearchMessage;
+use App\Message\Ticket\CreateTicketMessage;
+use App\Message\Ticket\TicketSearchMessage;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use JMS\Serializer\ArrayTransformerInterface;
 use Nelmio\ApiDocBundle\Annotation\Model;
